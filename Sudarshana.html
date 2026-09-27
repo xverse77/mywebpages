@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sudarshana</title>
+<meta name="description" content="Enter through the wheel that sees through time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cormorant+SC:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1220; --panel:#101b33; --gold:#c9a227; --ink:#e8dfc7;
+    --steel:#4a6fa5; --maroon:#6b2b3c; --fallback-serif: Georgia, 'Times New Roman', serif;
+    --fallback-sans: -apple-system, Helvetica, Arial, sans-serif;
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html{scroll-padding-top: env(safe-area-inset-top, 0px);}
+  *{box-sizing:inherit; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Inter', var(--fallback-sans);
+    font-weight:300; overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse at 50% -10%, rgba(74,111,165,0.18), transparent 60%),
+      radial-gradient(ellipse at 50% 110%, rgba(107,43,60,0.15), transparent 60%);
+  }
+  h1,h2{font-family:'Cormorant SC', var(--fallback-serif); font-weight:500; letter-spacing:0.04em;}
+  .devanagari{font-family:'Cormorant Garamond', var(--fallback-serif);}
+  section{
+    min-height:100vh; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; text-align:center; padding:6rem 1.5rem;
+    max-width:640px; margin:0 auto; position:relative;
+  }
+  .roman{color:var(--gold); font-size:0.85rem; letter-spacing:0.35em; margin-bottom:1.2rem; opacity:0.85;}
+  h1{font-size:clamp(2.6rem,7vw,4.2rem); margin-bottom:0.4rem;}
+  h2{font-size:clamp(1.7rem,4vw,2.3rem); margin-bottom:1rem; color:var(--ink);}
+  p{font-size:1.05rem; line-height:1.75; max-width:34rem; color:#c9c2ab;}
+  .lede{font-family:'Cormorant Garamond', var(--fallback-serif); font-style:italic; font-size:1.4rem; color:var(--gold); opacity:0.9; margin-bottom:0.6rem;}
+
+  /* ---------- 3D Chakra ---------- */
+  #hero{min-height:100svh;}
+  .stage{width:min(70vw,340px); aspect-ratio:1; margin:1.5rem auto; perspective:900px; touch-action:none; cursor:grab;}
+  .stage:active{cursor:grabbing;}
+  .gimbal{width:100%; height:100%; position:relative; transform-style:preserve-3d;
+    transform:rotateX(-18deg) rotateY(0deg); transition:transform .12s ease-out;}
+  .ring{position:absolute; inset:0; border-radius:50%; transform-style:preserve-3d;}
+  .ring svg{width:100%; height:100%; display:block; overflow:visible;}
+  .r-outer{transform:translateZ(0px);}
+  .r-mid{transform:translateZ(-26px) rotateZ(15deg); opacity:.85;}
+  .r-inner{transform:translateZ(-52px) rotateZ(-10deg); opacity:.6;}
+  .rim{stroke:var(--gold); stroke-width:2; fill:none;}
+  .spoke{stroke:var(--gold); stroke-width:1.3; opacity:0.7;}
+  .hub{fill:var(--gold);}
+  .autospin{animation:spin 26s linear infinite;}
+  @keyframes spin{ to{ transform:translateZ(var(--z,0px)) rotateZ(calc(var(--rz,0deg) + 360deg)); } }
+  @media (prefers-reduced-motion: reduce){ .autospin{animation:none;} }
+  .glow{filter:drop-shadow(0 0 22px rgba(201,162,39,0.4)) drop-shadow(0 0 60px rgba(74,111,165,0.25));}
+
+  .om{font-size:1.1rem; color:var(--steel); letter-spacing:0.15em; margin-top:1.4rem;}
+  .hint{position:absolute; bottom:2.2rem; font-size:0.78rem; letter-spacing:0.2em; color:#5b6786; text-transform:lowercase;}
+
+  .divider{width:1px; height:0; background:linear-gradient(var(--gold), transparent); margin:0 auto;
+    transition:height 1.1s cubic-bezier(.2,.7,.3,1);}
+  .divider.grown{height:4rem;}
+
+  .reveal{opacity:0; transform:translateY(26px) scale(.97); filter:blur(6px);
+    transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.3,1), filter .9s ease;}
+  .reveal.in{opacity:1; transform:translateY(0) scale(1); filter:blur(0);}
+  .reveal.d1.in{transition-delay:.08s;} .reveal.d2.in{transition-delay:.2s;} .reveal.d3.in{transition-delay:.34s;}
+
+  .tag{position:absolute; top:-.6rem; right:calc(50% - min(35vw,170px) - 2.6rem);
+    display:inline-flex; align-items:center; gap:.4rem; padding:.35rem .7rem;
+    border:1px solid rgba(201,162,39,.5); border-radius:999px; background:rgba(16,27,51,.6);
+    backdrop-filter:blur(4px); font-size:.68rem; letter-spacing:.1em; color:var(--gold);
+    pointer-events:none; animation:tagfloat 3.2s ease-in-out infinite;}
+  .tag .dot{width:.4rem; height:.4rem; border-radius:50%; background:var(--gold); animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes tagfloat{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+  @keyframes pulse{ 0%,100%{opacity:1; box-shadow:0 0 0 0 rgba(201,162,39,.6);} 50%{opacity:.5; box-shadow:0 0 0 5px rgba(201,162,39,0);} }
+  @media (max-width:520px){ .tag{position:static; margin-bottom:.8rem;} }
+
+  /* ---------- circular draggable mala ---------- */
+  .mala-stage{width:min(80vw,320px); aspect-ratio:1; position:relative; margin:1.8rem auto 0.6rem; touch-action:none; cursor:grab;}
+  .mala-stage:active{cursor:grabbing;}
+  .mala-ring{position:absolute; inset:0; transition:transform .08s linear;}
+  .bead{position:absolute; width:1.05rem; height:1.05rem; border-radius:50%; left:50%; top:50%;
+    background:radial-gradient(circle at 35% 30%, #7a5a2a, #2e2410 75%);
+    border:1px solid rgba(201,162,39,0.55);
+    transform-origin:0 0; pointer-events:none; transition:box-shadow .3s ease, transform .3s ease;}
+  .bead.guru{width:1.35rem; height:1.35rem; background:radial-gradient(circle at 35% 30%, var(--gold), #7a5a2a 75%);}
+  .bead.lit{box-shadow:0 0 14px 3px rgba(201,162,39,0.85);}
+  .counter{font-size:0.78rem; letter-spacing:0.2em; color:var(--steel); margin-top:0.4rem;}
+
+  .names{font-family:'Cormorant Garamond', var(--fallback-serif); font-size:1.15rem;
+    color:var(--ink); line-height:2.3; max-width:30rem;}
+  .names span{color:var(--gold); opacity:0.55; margin:0 0.35rem;}
+
+  blockquote{font-family:'Cormorant Garamond', var(--fallback-serif); font-style:italic;
+    font-size:1.35rem; line-height:1.85; color:var(--ink); max-width:32rem; margin:0 auto;}
+  cite{display:block; font-style:normal; font-size:0.82rem; letter-spacing:0.12em;
+    color:var(--steel); margin-top:0.9rem; text-transform:uppercase;}
+
+  .sea{width:100%; max-width:22rem; height:90px; margin:1.5rem auto;}
+  .wave{stroke:var(--steel); stroke-width:1.2; fill:none; opacity:0.6;}
+  .wave.draw{stroke-dasharray:340; stroke-dashoffset:340;}
+  .in .wave.draw{animation:drawline 2.4s ease forwards;}
+  @keyframes drawline{ to{ stroke-dashoffset:0; } }
+
+  footer{padding:3rem 1.5rem 4rem; text-align:center; font-size:0.8rem; color:#4a5578; letter-spacing:0.08em;}
+  a.top{color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(201,162,39,0.4);}
+</style>
+</head>
+<body>
+
+<section id="hero">
+  <div class="roman devanagari">ॐ नमो नारायणाय</div>
+  <h1>Sudarshana</h1>
+  <p class="lede">the wheel that sees through</p>
+
+  <div class="stage glow" id="stage">
+    <span class="tag"><span class="dot"></span>drag to turn</span>
+    <div class="gimbal" id="gimbal">
+      <div class="ring r-outer autospin" style="--z:0px; --rz:0deg;">
+        <svg viewBox="0 0 200 200"><circle class="rim" cx="100" cy="100" r="92"/></svg>
+      </div>
+      <div class="ring r-mid autospin" style="--z:-26px; --rz:15deg; animation-direction:reverse; animation-duration:34s;">
+        <svg viewBox="0 0 200 200">
+          <circle class="rim" cx="100" cy="100" r="70"/>
+          <g class="spoke">
+            <line x1="100" y1="8" x2="100" y2="192"/><line x1="8" y1="100" x2="192" y2="100"/>
+            <line x1="30" y1="30" x2="170" y2="170"/><line x1="170" y1="30" x2="30" y2="170"/>
+            <line x1="100" y1="8" x2="130" y2="30"/><line x1="192" y1="100" x2="170" y2="130"/>
+            <line x1="100" y1="192" x2="70" y2="170"/><line x1="8" y1="100" x2="30" y2="70"/>
+          </g>
+        </svg>
+      </div>
+      <div class="ring r-inner autospin" style="--z:-52px; --rz:-10deg; animation-duration:20s;">
+        <svg viewBox="0 0 200 200"><circle class="hub" cx="100" cy="100" r="9"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="om">drag the wheel — it turns at the edge of time</div>
+  <div class="hint">scroll to go deeper</div>
+</section>
+
+<section class="reveal">
+  <div class="roman reveal">I</div>
+  <h2 class="reveal d1">Tulasī</h2>
+  <p class="reveal d2">Her leaf never wilts on his chest. Each bead of the mālā is a small vow — drag the circle, let a bead pass under your thumb, and it remembers a name.</p>
+  <div class="mala-stage reveal d3" id="malaStage">
+    <div class="mala-ring" id="malaRing"></div>
+  </div>
+  <div class="counter reveal d3" id="counter">0 / 27</div>
+</section>
+
+<div class="divider"></div>
+
+<section class="reveal">
+  <div class="roman reveal">II</div>
+  <h2 class="reveal d1">Japa</h2>
+  <p class="reveal d2">One bead, one breath. Twelve names carried around the wheel, and a guru bead where the circle begins again.</p>
+  <div class="names reveal d3">
+    <span>1</span>Keśava <span>2</span>Nārāyaṇa <span>3</span>Mādhava <span>4</span>Govinda
+    <span>5</span>Viṣṇu <span>6</span>Madhusūdana <span>7</span>Trivikrama <span>8</span>Vāmana
+    <span>9</span>Śrīdhara <span>10</span>Hṛṣīkeśa <span>11</span>Padmanābha <span>12</span>Dāmodara
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="reveal">
+  <div class="roman">III</div>
+  <h2>Kṣīrasāgara</h2>
+  <p>He sleeps on the coiled body of Śeṣa, afloat on an ocean of milk, so that the worlds resting on his breath can keep dreaming.</p>
+  <svg class="sea" viewBox="0 0 300 90">
+    <path class="wave draw" d="M0,45 Q25,25 50,45 T100,45 T150,45 T200,45 T250,45 T300,45"/>
+    <path class="wave draw" d="M0,65 Q25,45 50,65 T100,65 T150,65 T200,65 T250,65 T300,65" opacity="0.35" style="animation-delay:.3s;"/>
+  </svg>
+</section>
+
+<div class="divider"></div>
+
+<section class="reveal">
+  <div class="roman">IV</div>
+  <h2>Two hands</h2>
+  <p>hold the conch and the mace — they keep the world standing.</p>
+</section>
+
+<section class="reveal">
+  <div class="roman">V</div>
+  <h2>The third and fourth</h2>
+  <p>hold the lotus and the wheel — one gives, the other cuts through whatever needs cutting.</p>
+</section>
+
+<div class="divider"></div>
+
+<section class="reveal" id="awakening">
+  <div class="roman">॥ awakening ॥</div>
+
+  <blockquote class="devanagari">
+    यदा यदा हि धर्मस्य ग्लानिर्भवति भारत ।<br>
+    अभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम् ॥
+    <cite>Bhagavad Gītā 4.7 — Whenever dharma weakens and its opposite rises, I take form.</cite>
+  </blockquote>
+
+  <br>
+  <blockquote class="devanagari">
+    परित्राणाय साधूनां विनाशाय च दुष्कृताम् ।<br>
+    धर्मसंस्थापनार्थाय सम्भवामि युगे युगे ॥
+    <cite>Bhagavad Gītā 4.8 — To shelter the good, end the cruel, and set dharma upright again, I am born age after age.</cite>
+  </blockquote>
+
+  <br>
+  <blockquote class="devanagari">
+    ॐ नारायणाय विद्महे वासुदेवाय धीमहि ।<br>
+    तन्नो विष्णुः प्रचोदयात् ॥
+    <cite>Viṣṇu Gāyatrī — Let us know Nārāyaṇa, let us hold Vāsudeva in the mind; may that Viṣṇu guide our thought.</cite>
+  </blockquote>
+
+  <br>
+  <blockquote class="devanagari">
+    ईशावास्यमिदं सर्वं यत्किञ्च जगत्यां जगत् ।
+    <cite>Īśa Upaniṣad 1 — Everything that moves in this moving world is dwelt in by the Lord.</cite>
+  </blockquote>
+
+  <p style="margin-top:2.5rem;"><a class="top" href="#top">return to the surface</a></p>
+</section>
+
+<footer>Sudarshana</footer>
+
+<script>
+document.querySelectorAll('.reveal').forEach(el=>{
+  const io=new IntersectionObserver(([e])=>{ if(e.isIntersecting){ e.target.classList.add('in'); } },{threshold:0.2});
+  io.observe(el);
+});
+document.querySelectorAll('.divider').forEach(el=>{
+  const io=new IntersectionObserver(([e])=>{ if(e.isIntersecting){ e.target.classList.add('grown'); } },{threshold:0.6});
+  io.observe(el);
+});
+/* subtle scroll parallax on the hero chakra */
+(function(){
+  const hero=document.getElementById('hero'), gimbal=document.getElementById('gimbal');
+  if(!hero||!gimbal) return;
+  window.addEventListener('scroll', ()=>{
+    const p=Math.min(1, window.scrollY / (hero.offsetHeight||600));
+    hero.style.opacity = 1-p*0.9;
+    hero.style.transform = `translateY(${p*40}px) scale(${1-p*0.08})`;
+  }, {passive:true});
+})();
+
+/* ---- 3D chakra drag ---- */
+(function(){
+  const stage=document.getElementById('stage'), gimbal=document.getElementById('gimbal');
+  let rx=-18, ry=0, dragging=false, lastX=0, lastY=0;
+  function apply(){ gimbal.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`; }
+  function down(x,y){ dragging=true; lastX=x; lastY=y; gimbal.style.transition='none'; }
+  function move(x,y){ if(!dragging) return; ry += (x-lastX)*0.4; rx -= (y-lastY)*0.4;
+    rx=Math.max(-60,Math.min(60,rx)); lastX=x; lastY=y; apply(); }
+  function up(){ dragging=false; gimbal.style.transition='transform .5s ease-out'; }
+  stage.addEventListener('pointerdown', e=>{ stage.setPointerCapture(e.pointerId); down(e.clientX,e.clientY); });
+  stage.addEventListener('pointermove', e=> move(e.clientX,e.clientY));
+  stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up);
+  apply();
+})();
+
+/* ---- circular draggable mala ---- */
+(function(){
+  const N=27, ring=document.getElementById('malaRing'), stageEl=document.getElementById('malaStage'), counter=document.getElementById('counter');
+  const beads=[];
+  const R=42; // percent radius
+  for(let i=0;i<N;i++){
+    const b=document.createElement('div');
+    b.className='bead'+(i===0?' guru':'');
+    const angle=(i/N)*360;
+    b.style.transform=`rotate(${angle}deg) translate(${R}%) rotate(${-angle}deg) translate(-50%,-50%)`;
+    b.dataset.angle=angle;
+    ring.appendChild(b);
+    beads.push(b);
+  }
+  let rot=0, dragging=false, lastX=0, lastAngle=0, litCount=0;
+  function center(){ const r=stageEl.getBoundingClientRect(); return {x:r.left+r.width/2, y:r.top+r.height/2}; }
+  function angleFor(x,y){ const c=center(); return Math.atan2(y-c.y, x-c.x)*180/Math.PI; }
+  function setRotation(deg){
+    rot=deg;
+    ring.style.transform=`rotate(${rot}deg)`;
+    beads.forEach(b=>{
+      const abs=((parseFloat(b.dataset.angle)+rot)%360+360)%360;
+      const lit = abs>350||abs<10; // near the "reading point" (top-ish)
+      b.classList.toggle('lit', lit);
+    });
+    litCount = beads.filter(b=>b.classList.contains('lit')).length;
+    counter.textContent = beads.filter((b,i)=>b.classList.contains('lit')).length ? `passing bead` : `${Math.round(Math.abs(rot)/ (360/N))%N} / ${N}`;
+  }
+  function down(e){ dragging=true; lastAngle=angleFor(e.clientX,e.clientY)-rot; stageEl.setPointerCapture(e.pointerId); }
+  function move(e){ if(!dragging) return; const a=angleFor(e.clientX,e.clientY); setRotation(a-lastAngle); }
+  function up(){ dragging=false; }
+  stageEl.addEventListener('pointerdown', down);
+  stageEl.addEventListener('pointermove', move);
+  stageEl.addEventListener('pointerup', up);
+  stageEl.addEventListener('pointercancel', up);
+  setRotation(0);
+})();
+</script>
+</body>
+</html>
